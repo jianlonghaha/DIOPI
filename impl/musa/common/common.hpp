@@ -26,7 +26,6 @@ inline bool is_scalar(const at::Tensor& tensor) {
 }
 
 
-// const at::detail::MUSAHooksInterface& hooks = at::detail::getMUSAHooks();
 const at::MUSAHooksInterface& hooks = at::detail::getMUSAHooks();
 
 inline bool isInt(const diopiScalar_t* scalar) { return scalar->stype <= 7; }
@@ -132,10 +131,10 @@ at::Tensor build_musatorch_tensor(T tensor) {
         tensor_strides.push_back(1);
     }
 
-    auto options = at::TensorOptions().dtype(scalar_type).device(at::kPrivateUse1);
-    // auto options = at::TensorOptions().dtype(scalar_type).device(at::kXPU);
+    // auto options = at::TensorOptions().dtype(scalar_type).device(at::kPrivateUse1);
+    // auto options = at::TensorOptions().dtype(scalar_type).device(at::kPrivateUse1);
     // auto options = at::TensorOptions().dtype(scalar_type).device(at::kCPU);
-    return at::from_blob(data, tensor_sizes, tensor_strides, options); // 从已有数据创建Tensor
+    return at::from_blob(data, tensor_sizes, tensor_strides); // 从已有数据创建Tensor
 }
 
 }  // namespace musa

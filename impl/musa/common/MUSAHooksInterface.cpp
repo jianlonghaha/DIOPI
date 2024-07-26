@@ -1,6 +1,8 @@
 #include "MUSAHooksInterface.h"
 #include <c10/util/CallOnce.h>
 #include <c10/util/Exception.h>
+#include "Utils.h"
+#include "Handle.h"
 
 namespace at {
 namespace detail {
@@ -14,6 +16,7 @@ static at::MUSAHooksInterface* get_private_hooks() {
 void RegisterHook() {
   at::RegisterPrivateUse1HooksInterface(get_private_hooks());
 }
+
 
 const MUSAHooksInterface& getMUSAHooks() {
   static c10::once_flag once;

@@ -1,6 +1,6 @@
 include(FindPackageHandleStandardArgs)
 cmake_minimum_required(VERSION 3.14)
-project(HelloLib)
+project(musa_impl)
 
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -13,7 +13,7 @@ else()
     set(MUSA_PATH $ENV{MUSA_PATH})
 endif()
 
-set(MUSART_KERNELS_LIBRARY_PATH  /home/torch_musa/torch_musa/)
+# set(MUSART_KERNELS_LIBRARY_PATH  /home/torch_musa/torch_musa/)
 
 # musa.h musa_runtime_api.h musa_runtime.h
 find_path(MUSA_INCLUDE_DIR NAMES musa.h musa_runtime_api.h musa_runtime.h HINTS ${MUSA_PATH}/include)
@@ -50,13 +50,13 @@ IF (NOT MUSART_LIBRARY)
 ENDIF()
 
 # libmusa_python.so
-find_library(musa_python_lb  musa_python
-   HINTS ${MUSART_KERNELS_LIBRARY_PATH}/lib 
-)
-MESSAGE("musa_python:" ${musa_python_lb})
-IF (NOT musa_python_lb)
-  MESSAGE(FATAL_ERROR " Could not find libmusa_python so. Make sure fullstack is installed, or ibmusa_python_PATH is set properly.")
-ENDIF()
+# find_library(musa_python_lb  musa_python
+#    HINTS ${MUSART_KERNELS_LIBRARY_PATH}/lib 
+# )
+# MESSAGE("musa_python:" ${musa_python_lb})
+# IF (NOT musa_python_lb)
+#   MESSAGE(FATAL_ERROR " Could not find libmusa_python so. Make sure fullstack is installed, or ibmusa_python_PATH is set properly.")
+# ENDIF()
 
 set(MUDNN_INCLUDE_SEARCH_PATHS $ENV{MUSA_HOME}/include/)
 set(MUDNN_LIB_SEARCH_PATHS $ENV{MUSA_HOME}/lib)
@@ -84,11 +84,15 @@ add_library(diopi_impl SHARED ${CMAKE_CURRENT_SOURCE_DIR}/functions/basic_op.cpp
                               ${CMAKE_CURRENT_SOURCE_DIR}/common/Utils.cpp
                               ${CMAKE_CURRENT_SOURCE_DIR}/common/Utils.h
                               ${CMAKE_CURRENT_SOURCE_DIR}/common/DeviceThreadHandles.h
-                                                     
+                              ${CMAKE_CURRENT_SOURCE_DIR}/common/MUSAHooksInterface.cpp     
+                              ${CMAKE_CURRENT_SOURCE_DIR}/common/MUSAHooksInterface.h  
+                              /opt/conda/envs/py38/lib/python3.8/site-packages/torch/lib/libtorch_python.so    
+                              /opt/conda/envs/py38/lib/python3.8/site-packages/torch/lib/libtorch_cpu.so  
+                              /opt/conda/envs/py38/lib/python3.8/site-packages/torch/lib/libc10.so    
                               )
 target_link_libraries(diopi_impl PUBLIC 
                         ${MUSART_LIBRARY}
-                        ${musa_python_lb}                  
+                        # ${musa_python_lb}                  
                         ${MUDNN_LIBRARY}
                          )
                          

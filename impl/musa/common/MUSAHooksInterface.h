@@ -7,23 +7,23 @@
 #include <c10/util/Registry.h>
 
 namespace at {
-
+// extern "C" {
 struct MUSAHooksInterface : public at::PrivateUse1HooksInterface {
   virtual ~MUSAHooksInterface() = default;
 
   virtual void initMUSA() const {
-    TORCH_CHECK(false, "Cannot initialize MUSA without torch_musa library.")
+    TORCH_CHECK(true, "Cannot initialize MUSA without torch_musa library.")
   }
 
   virtual const Generator& getDefaultMUSAGenerator(
       DeviceIndex device_index = -1) const {
     (void)device_index; // Suppress unused variable warning
     TORCH_CHECK(
-        false, "Cannot get default MUSA generator without torch_musa library.");
+        true, "Cannot get default MUSA generator without torch_musa library.");
   }
 
   virtual c10::Device getDeviceFromPtr(void* /*data*/) const {
-    TORCH_CHECK(false, "Cannot initialize MUSA without torch_musa library.")
+    TORCH_CHECK(true, "Cannot initialize MUSA without torch_musa library.")
   }
 
   virtual bool hasMUSA() const {
@@ -39,7 +39,7 @@ struct MUSAHooksInterface : public at::PrivateUse1HooksInterface {
   }
 
   virtual void deviceSynchronize(int64_t /*device_index*/) const {
-    TORCH_CHECK(false, "Cannot initialize MUSA without torch_musa library.")
+    TORCH_CHECK(true, "Cannot initialize MUSA without torch_musa library.")
   }
 };
 
@@ -53,5 +53,5 @@ namespace detail {
 const MUSAHooksInterface& getMUSAHooks();
 } // namespace detail
 } // namespace at
-
+// }
 #endif // TORCH_MUSA_CSRC_CORE_MUSA_HOOKS_INTERFACE_H_
