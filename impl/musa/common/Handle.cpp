@@ -43,7 +43,6 @@ using MudnnPoolType = at::impl::musa::DeviceThreadHandlePool<
 ::musa::dnn::Handle& GetMudnnHandle() {
   int device;
   TORCH_MUSA_CHECK(musaGetDevice(&device));
-  std::cout << "==================== " << device << " ==Handle.cpp========================\n";
 
   // Thread local PoolWindows are lazily-initialized
   // to avoid initialization issues that caused hangs on Windows.
