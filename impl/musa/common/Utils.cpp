@@ -123,7 +123,6 @@ inline void SetTensorTypeAndAddr(const Tensor& t, muTensor& m_t) {
 }
 
 muTensor CreateMUTensor(const Tensor& t, bool permute_if_not_contiguous) {
-  std::cout << "==================CreateMUTensor========================\n";
 
   muTensor rst;
   SetTensorTypeAndAddr(t, rst);
