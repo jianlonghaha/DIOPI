@@ -13,13 +13,26 @@
 #include <vector>
 #include "../musa_pytorch.h"
 #include "MUSAHooksInterface.h"
+#include <ATen/core/TensorBase.h>
+#include <ATen/native/DispatchStub.h>
+#include <c10/core/Scalar.h>
 
 #define DEBUG false
-// namespace impl {
-
 namespace  at{
 namespace impl {
 namespace musa {
+
+
+inline void alpha_check(const ScalarType dtype, const Scalar& alpha) {
+  TORCH_CHECK(! alpha.isBoolean() || dtype == ScalarType::Bool,
+              "Boolean alpha only supported for Boolean results.");
+  TORCH_CHECK(isFloatingType(dtype) || isComplexType(dtype)
+              || alpha.isIntegral(true),
+              "For integral input tensors, argument alpha must not be a floating point number.");
+  TORCH_CHECK(isComplexType(dtype) || !alpha.isComplex(),
+              "For non-complex input tensors, argument alpha must not be a complex number.")
+}
+
 
 inline bool is_scalar(const at::Tensor& tensor) {
   return tensor.numel() == 1 && tensor.dim() == 0;
@@ -27,7 +40,7 @@ inline bool is_scalar(const at::Tensor& tensor) {
 
 
 const at::MUSAHooksInterface& hooks = at::detail::getMUSAHooks();
-
+// REGISTER_MUSA_HOOKS(hooks);
 inline bool isInt(const diopiScalar_t* scalar) { return scalar->stype <= 7; }
 inline bool isFloat(const diopiScalar_t* scalar) { return scalar->stype > 7; }
 
@@ -46,7 +59,6 @@ c10::Scalar build_musatorch_scalar(const diopiScalar_t* scalar) {
         return c10::Scalar(fval);
     }
 }
-
 c10::ScalarType get_musatorch_type(diopiDtype_t dt) {
     switch (dt) {
         case diopi_dtype_bool:
@@ -59,18 +71,21 @@ c10::ScalarType get_musatorch_type(diopiDtype_t dt) {
             return c10::ScalarType::Short;
         case diopi_dtype_float32:
             return c10::ScalarType::Float;
-        case diopi_dtype_int32:  // 新增
+        case diopi_dtype_int32:  
             return c10::ScalarType::Int;
-        case diopi_dtype_int64:  // 新增
+        case diopi_dtype_int64:  
             return c10::ScalarType::Long;
-        case diopi_dtype_float16: // 新增
+        case diopi_dtype_float16: 
             return c10::ScalarType::Half;
-        case diopi_dtype_float64: // 新增
+        case diopi_dtype_float64: 
             return c10::ScalarType::Double;   
         default:
             throw std::invalid_argument("Unsupported diopi dtype");
     }
 }
+
+
+
 template <typename T>
 at::Tensor build_musatorch_tensor(T tensor) {
     if (DEBUG) {
@@ -80,9 +95,9 @@ at::Tensor build_musatorch_tensor(T tensor) {
         if (DEBUG) {
             printf("tensor is nullptr\n");
         }
+        std::cout << "==================// 创建空Tensor=======================\n";
         return at::empty({0}, at::TensorOptions().dtype(at::kFloat)); // 创建空Tensor
     }
-
     diopiSize_t dsize;
     diopiError_t err = diopiGetTensorShape(tensor, &dsize);
     if (err != diopiSuccess) {
@@ -91,7 +106,6 @@ at::Tensor build_musatorch_tensor(T tensor) {
     if (DEBUG) {
         printf("tensor dsize len is %ld\n", dsize.len);
     }
-
     void* data = nullptr;
     err = diopiGetTensorData(const_cast<diopiTensorHandle_t>(tensor), &data);
     if (err != diopiSuccess) {
@@ -100,7 +114,6 @@ at::Tensor build_musatorch_tensor(T tensor) {
     if (DEBUG) {
         printf("tensor ptr is %p\n", data);
     }
-
     diopiDtype_t dtype;
     err = diopiGetTensorDtype(tensor, &dtype);
     if (err != diopiSuccess) {
@@ -110,7 +123,6 @@ at::Tensor build_musatorch_tensor(T tensor) {
         printf("tensor dtype is %d\n", static_cast<int>(dtype));
     }
     auto scalar_type = get_musatorch_type(dtype);
-
     diopiSize_t shape;
     err = diopiGetTensorShape(tensor, &shape);
     if (err != diopiSuccess) {
@@ -120,7 +132,6 @@ at::Tensor build_musatorch_tensor(T tensor) {
     if (dsize.len == 0) {
         tensor_sizes.push_back(1);
     }
-
     diopiSize_t stride;
     err = diopiGetTensorStride(tensor, &stride);
     if (err != diopiSuccess) {
@@ -130,11 +141,13 @@ at::Tensor build_musatorch_tensor(T tensor) {
     if (dsize.len == 0) {
         tensor_strides.push_back(1);
     }
-
     // auto options = at::TensorOptions().dtype(scalar_type).device(at::kPrivateUse1);
-    // auto options = at::TensorOptions().dtype(scalar_type).device(at::kPrivateUse1);
+    auto options = at::TensorOptions().dtype(scalar_type).device(at::kPrivateUse1);
     // auto options = at::TensorOptions().dtype(scalar_type).device(at::kCPU);
-    return at::from_blob(data, tensor_sizes, tensor_strides); // 从已有数据创建Tensor
+    // auto options = at::TensorOptions().dtype(scalar_type).device(at::kXPU);
+    // return at::from_blob(data, tensor_sizes, tensor_strides,options.requires_grad(c10::nullopt)); 
+    // at::TensorOptions options = at::TensorOptions().dtype(at::kFloat).device(at::kPrivateUse1, 0);
+    return at::from_blob(data, tensor_sizes, tensor_strides,options); // 从已有数据创建Tensor
 }
 
 }  // namespace musa

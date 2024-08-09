@@ -15,7 +15,6 @@
 // #include "torch_musa/csrc/aten/ops/TensorFactory.h"
 #include "Utils.h"
 // #include "torch_musa/csrc/core/Allocator.h"
-
 #include <mudnn.h>
 
 namespace at {
@@ -123,12 +122,19 @@ inline void SetTensorTypeAndAddr(const Tensor& t, muTensor& m_t) {
 }
 
 muTensor CreateMUTensor(const Tensor& t, bool permute_if_not_contiguous) {
-
   muTensor rst;
   SetTensorTypeAndAddr(t, rst);
   ConfigFormat(t, rst, permute_if_not_contiguous);
   return rst;
 }
+
+
+// muScalar CreateMUScalar(const Scalar& t, bool permute_if_not_contiguous) {
+//   muScalar rst;
+//   SetScalarTypeAndAddr(t, rst);
+//   ConfigFormat(t, rst, permute_if_not_contiguous);
+//   return rst;
+// }
 
 // void InternalMemFree(void* ptr) {
 //   if (!ptr) {

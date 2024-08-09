@@ -1,8 +1,12 @@
 #include "MUSAHooksInterface.h"
+#include <ATen/detail/PrivateUse1HooksInterface.h>
 #include <c10/util/CallOnce.h>
+#include <c10/util/Registry.h>
+#include <c10/core/Device.h>
 #include <c10/util/Exception.h>
 #include "Utils.h"
 #include "Handle.h"
+#include <iostream>
 
 namespace at {
 namespace detail {
@@ -14,10 +18,11 @@ static at::MUSAHooksInterface* get_private_hooks() {
 }
 
 void RegisterHook() {
+  std::cout << "===================RegisterHook==========================\n";
   at::RegisterPrivateUse1HooksInterface(get_private_hooks());
+  std::cout << "===================RegisterHook001==========================\n";
+
 }
-
-
 const MUSAHooksInterface& getMUSAHooks() {
   static c10::once_flag once;
   c10::call_once(once, [] {
