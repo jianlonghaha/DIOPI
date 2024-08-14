@@ -6,7 +6,7 @@
 namespace at {
 // namespace musa {
 namespace detail {
-
+  
 struct MUSAHooks : public MUSAHooksInterface {
   MUSAHooks(MUSAHooksArgs) {}
   void initMUSA() const override;
@@ -18,6 +18,8 @@ struct MUSAHooks : public MUSAHooksInterface {
   int getNumGPUs() const override;
   void deviceSynchronize(int64_t device_index) const override;
 };
+
+
 
 } // namespace detail
 } // namespace musa

@@ -14,8 +14,10 @@
 
 // #include "torch_musa/csrc/aten/ops/TensorFactory.h"
 #include "Utils.h"
-// #include "torch_musa/csrc/core/Allocator.h"
 #include <mudnn.h>
+
+#include "../core/Allocator.h"
+
 
 namespace at {
 namespace impl {
@@ -128,28 +130,43 @@ muTensor CreateMUTensor(const Tensor& t, bool permute_if_not_contiguous) {
   return rst;
 }
 
+Tensor ContiguousRef(
+    const Tensor& self,
+    Tensor& ref,
+    MemoryFormat memory_format) {
+  ref = self.contiguous(memory_format);
+  return ref;
+}
 
-// muScalar CreateMUScalar(const Scalar& t, bool permute_if_not_contiguous) {
-//   muScalar rst;
-//   SetScalarTypeAndAddr(t, rst);
-//   ConfigFormat(t, rst, permute_if_not_contiguous);
-//   return rst;
-// }
 
-// void InternalMemFree(void* ptr) {
-//   if (!ptr) {
-//     return;
-//   }
-//   c10::musa::MUSACachingAllocator::raw_delete(ptr);
-// }
 
-// ::musa::dnn::MemoryHandler InternalMemAlloc(size_t s) {
-//   void* data = nullptr;
-//   if (s) {
-//     data = c10::musa::MUSACachingAllocator::raw_alloc(s);
-//   }
-//   return ::musa::dnn::MemoryHandler(data, InternalMemFree);
-// }
+
+
+
+
+
+void InternalMemFree(void* ptr) {
+  if (!ptr) {
+    return;
+  }
+  c10::musa::MUSACachingAllocator::raw_delete(ptr);
+}
+
+
+::musa::dnn::MemoryHandler InternalMemAlloc(size_t s) {
+  void* data = nullptr;
+  if (s) {
+    data = c10::musa::MUSACachingAllocator::raw_alloc(s);
+  }
+  return ::musa::dnn::MemoryHandler(data, InternalMemFree);
+}
+
+
+
+
+
+
+
 
 bool is_musa(const Tensor& t) {
   return t.device().type() == kMUSA;

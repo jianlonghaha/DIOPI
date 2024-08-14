@@ -74,6 +74,12 @@ inline muTensor CreateEmptyMUTensor() {
   return muTensor();
 }
 
+Tensor ContiguousRef(
+    const Tensor& self,
+    Tensor& result,
+    MemoryFormat memory_format = MemoryFormat::Contiguous);
+
+
 // May need to contiguous the input pytorch tensor according the needed
 // tensor format, so need to pass tensor as reference
 void ConfigFormat(
@@ -92,6 +98,8 @@ void inline SetMudnnQuantizationInfo(
       self.SetQuantizationInfo(1, &scales_, &zero_points_),
       "Set quantization info");
 }
+
+
 
 // use for memory handler
 void InternalMemFree(void* ptr);
@@ -123,7 +131,7 @@ Tensor create_out(
 
 // bool MatContiguous(const Tensor& mat);
 
-// bool IsTranspose(const Tensor& mat, bool strict = true);
+bool IsTranspose(const Tensor& mat, bool strict = true);
 
 // Tensor FormatContiguous(const Tensor& t, at::MemoryFormat memory_format);
 

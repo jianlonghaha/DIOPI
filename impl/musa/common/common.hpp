@@ -11,17 +11,24 @@
 #include <mutex>
 #include <thread>
 #include <vector>
-#include "../musa_pytorch.h"
-#include "MUSAHooksInterface.h"
 #include <ATen/core/TensorBase.h>
 #include <ATen/native/DispatchStub.h>
 #include <c10/core/Scalar.h>
+
+
+
+// #include "MUSAHooksInterface.h"
+#include "../musa_pytorch.h"
+#include "MUSAHooks.h"
+#include "Utils.h"
+
 
 #define DEBUG false
 namespace  at{
 namespace impl {
 namespace musa {
 
+const at::MUSAHooksInterface& hooks = at::detail::getMUSAHooks();
 
 inline void alpha_check(const ScalarType dtype, const Scalar& alpha) {
   TORCH_CHECK(! alpha.isBoolean() || dtype == ScalarType::Bool,
@@ -39,12 +46,11 @@ inline bool is_scalar(const at::Tensor& tensor) {
 }
 
 
-const at::MUSAHooksInterface& hooks = at::detail::getMUSAHooks();
-// REGISTER_MUSA_HOOKS(hooks);
+
 inline bool isInt(const diopiScalar_t* scalar) { return scalar->stype <= 7; }
 inline bool isFloat(const diopiScalar_t* scalar) { return scalar->stype > 7; }
 
-c10::Scalar build_musatorch_scalar(const diopiScalar_t* scalar) {
+inline  c10::Scalar build_musatorch_scalar(const diopiScalar_t* scalar) {
     if (scalar == nullptr) {
         throw std::invalid_argument("scalar is nullptr, temporarily unsupported");
     }
@@ -59,7 +65,7 @@ c10::Scalar build_musatorch_scalar(const diopiScalar_t* scalar) {
         return c10::Scalar(fval);
     }
 }
-c10::ScalarType get_musatorch_type(diopiDtype_t dt) {
+inline c10::ScalarType get_musatorch_type(diopiDtype_t dt) {
     switch (dt) {
         case diopi_dtype_bool:
             return c10::ScalarType::Bool;

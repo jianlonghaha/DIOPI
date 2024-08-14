@@ -78,6 +78,10 @@ include_directories(${MUSA_INCLUDE_DIR}
                     ${MUDNN_INCLUDE_DIR}
                               )                        
 
+
+file(GLOB MUSA_CORE_HEADS "${CMAKE_SOURCE_DIR}/third_party/DIOPI/impl/musa/core/*.h")
+file(GLOB MUSA_CORE_SOURCES "${CMAKE_SOURCE_DIR}/third_party/DIOPI/impl/musa/core/*.cpp")
+
 add_library(diopi_impl SHARED ${CMAKE_CURRENT_SOURCE_DIR}/functions/basic_op.cpp  
                               ${CMAKE_CURRENT_SOURCE_DIR}/common/common.hpp
                               ${CMAKE_CURRENT_SOURCE_DIR}/common/Handle.cpp
@@ -89,6 +93,46 @@ add_library(diopi_impl SHARED ${CMAKE_CURRENT_SOURCE_DIR}/functions/basic_op.cpp
                               ${CMAKE_CURRENT_SOURCE_DIR}/common/MUSAHooksInterface.h  
                               ${CMAKE_CURRENT_SOURCE_DIR}/common/MUSAHooks.cpp
                               ${CMAKE_CURRENT_SOURCE_DIR}/common/MUSAHooks.h
+                              ${CMAKE_CURRENT_SOURCE_DIR}/common/Context.cpp
+                              ${CMAKE_CURRENT_SOURCE_DIR}/common/Context.h
+                              ${CMAKE_CURRENT_SOURCE_DIR}/common/musa_lazy_init.cpp
+                              ${CMAKE_CURRENT_SOURCE_DIR}/common/musa_lazy_init.h
+                              ${CMAKE_CURRENT_SOURCE_DIR}/common/Reduce.hpp
+
+
+                              ${MUSA_CORE_HEADS}
+                              ${MUSA_CORE_SOURCES}
+
+                              # ${CMAKE_CURRENT_SOURCE_DIR}/common/Allocator.h
+                              # ${CMAKE_CURRENT_SOURCE_DIR}/common/Allocator.cpp
+                              # ${CMAKE_CURRENT_SOURCE_DIR}/common/Device.h
+                              # ${CMAKE_CURRENT_SOURCE_DIR}/common/Device.cpp
+                              # ${CMAKE_CURRENT_SOURCE_DIR}/common/GuardImpl.h
+                              # ${CMAKE_CURRENT_SOURCE_DIR}/common/GuardImpl.cpp
+                              # ${CMAKE_CURRENT_SOURCE_DIR}/common/Logging.h
+                              # ${CMAKE_CURRENT_SOURCE_DIR}/common/MUSADeviceAssertionHost.cpp
+                              # ${CMAKE_CURRENT_SOURCE_DIR}/common/MUSADeviceAssertionHost.h
+                              # ${CMAKE_CURRENT_SOURCE_DIR}/common/MUSAException.cpp
+                              # ${CMAKE_CURRENT_SOURCE_DIR}/common/MUSAException.h
+                              # ${CMAKE_CURRENT_SOURCE_DIR}/common/MUSAGraphsC10Utils.h
+                              # ${CMAKE_CURRENT_SOURCE_DIR}/common/MUSAStream.cpp
+                              # ${CMAKE_CURRENT_SOURCE_DIR}/common/MUSAStream.h
+                              # ${CMAKE_CURRENT_SOURCE_DIR}/common/MUSA_PORT_Macros.h
+                              # ${CMAKE_CURRENT_SOURCE_DIR}/common/musa_cmake_macros.h
+                              # ${CMAKE_CURRENT_SOURCE_DIR}/common/MUSAMiscFunctions.h
+                              # ${CMAKE_CURRENT_SOURCE_DIR}/common/MUSAMiscFunctions.cpp
+                              ${CMAKE_CURRENT_SOURCE_DIR}/common/Matmul.hpp
+
+
+
+
+
+                            
+                              # ${CMAKE_CURRENT_SOURCE_DIR}/common/Matmul.cpp
+                              # ${CMAKE_CURRENT_SOURCE_DIR}/common/Matmul.h 
+                              # ${CMAKE_CURRENT_SOURCE_DIR}/common/Matmul.hpp    
+
+                            
                               /opt/conda/envs/py38/lib/python3.8/site-packages/torch/lib/libtorch_python.so    
                               /opt/conda/envs/py38/lib/python3.8/site-packages/torch/lib/libtorch_cpu.so  
                               /opt/conda/envs/py38/lib/python3.8/site-packages/torch/lib/libc10.so    
