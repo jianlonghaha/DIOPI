@@ -63,7 +63,9 @@ void MmCall(
         b_mm.SetComputeMode(at::impl::musa::GetComputeModeFromCtx(l.scalar_type())),
         "SetComputeMode");
     CHECK_MUDNN_STATUS(b_mm.SetTranspose(trans_l, trans_r), "SetTranspose");
-    CHECK_MUDNN_STATUS(b_mm.Run(h, rst, lmt, rmt, at::impl::musa::InternalMemAlloc), "Run");
+    CHECK_MUDNN_STATUS(b_mm.Run(h, rst, lmt, rmt, InternalMemAlloc), "Run");
+    // CHECK_MUDNN_STATUS(b_mm.Run(h, rst, lmt, rmt, at::impl::musa::InternalMemAlloc), "Run");
+
     // CHECK_MUDNN_STATUS(b_mm.Run(h, rst, lmt, rmt), "Run");
     std::cout << "=================hello,is_batch========================\n";
 
@@ -137,36 +139,6 @@ at::Tensor& MmOut(const at::Tensor& self, const at::Tensor& mat2, at::Tensor& ou
 // }
 
 
-
-
-
-void PrintTensorValues(const at::Tensor& tensor) {
-    std::cout << "================开始===============\n";
-
-    // 确保张量在CPU上，以便我们可以直接访问数据
-    at::Tensor tensor_cpu = tensor.cpu();
-
-    // 获取张量的大小
-    auto sizes = tensor_cpu.sizes();
-    int batch_size = sizes[0];
-    int rows = sizes[1];
-    int cols = sizes[2];
-
-    // 遍历张量并打印值
-    for (int b = 0; b < batch_size; ++b) {
-        std::cout << "Batch " << b << ":\n";
-        for (int r = 0; r < rows; ++r) {
-            for (int c = 0; c < cols; ++c) {
-                // 访问张量元素并打印
-                std::cout << tensor_cpu[b][r][c].item<float>() << " ";
-            }
-            std::cout << "\n"; // 每行打印后换行
-        }
-        std::cout << "\n"; // 每个batch打印后换行
-    }
-    std::cout << "================结束===============\n";
-}
-
 at::Tensor& BmmOut(const at::Tensor& self, const at::Tensor& mat2, at::Tensor& out) {
   // const auto device_guard = c10::musa::MUSAGuard(self.device());
   TORCH_CHECK(self.dim() == 3 && mat2.dim() == 3, "self must be a 3D matrix");
@@ -174,12 +146,7 @@ at::Tensor& BmmOut(const at::Tensor& self, const at::Tensor& mat2, at::Tensor& o
       self.size(0) == mat2.size(0) && self.size(2) == mat2.size(1),
       "self_shape[0] must equal to mat2_shape[0], and self_shape[2] "
       "must equal to mat2_shape[1]");
-  // std::cout << "=================hello,BmmOut self======="<<self<<"=================\n";
-  // std::cout << "=================hello,BmmOut mat2======="<<mat2<<"=================\n";
-  // std::cout << "=================hello,BmmOut out======="<<out<<"=================\n";
-  // PrintTensorValues(self);
-  // PrintTensorValues(mat2);
-  // PrintTensorValues(out);
+ 
     
   MmCall(self, mat2, c10::nullopt, out, true);
   std::cout << "=================hello,BmmOut========================\n";
