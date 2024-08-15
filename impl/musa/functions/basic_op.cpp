@@ -56,27 +56,20 @@ DIOPI_RT_API const char* diopiGetVendorName() { return name; }
 
 void PrintTensorValues(const at::Tensor& tensor) {
     std::cout << "================开始===============\n";
-
-    // 确保张量在CPU上，以便可以直接访问数据
     at::Tensor tensor_cpu = tensor.cpu();
-
-    // 获取张量的大小
     auto sizes = tensor_cpu.sizes();
     int batch_size = sizes[0];
     int rows = sizes[1];
     int cols = sizes[2];
-
-    // 遍历张量并打印值
     for (int b = 0; b < batch_size; ++b) {
         std::cout << "Batch " << b << ":\n";
         for (int r = 0; r < rows; ++r) {
             for (int c = 0; c < cols; ++c) {
-                // 访问张量元素并打印
                 std::cout << tensor_cpu[b][r][c].item<float>() << " ";
             }
-            std::cout << "\n"; // 每行打印后换行
+            std::cout << "\n"; 
         }
-        std::cout << "\n"; // 每个batch打印后换行
+        std::cout << "\n"; 
     }
     std::cout << "================结束===============\n";
 }
@@ -323,8 +316,6 @@ DIOPI_API diopiError_t diopiMul(diopiContextHandle_t ctx, diopiTensorHandle_t ou
 
 
 
-
-
 inline void CheckDimParams(const  musa_torch::Tensor& input, const int64_t dim) {
   int64_t dim_ = at::maybe_wrap_dim(dim, input.dim());
   int64_t input_dim = input.dim() > 0 ? input.dim() : 1;
@@ -332,6 +323,8 @@ inline void CheckDimParams(const  musa_torch::Tensor& input, const int64_t dim) 
       dim_ >= 0 && dim_ < input_dim,
       "dim must be non-negative and less than input dimensions");
 }
+
+
 DIOPI_API diopiError_t diopiSoftmax(diopiContextHandle_t ctx, diopiTensorHandle_t out, diopiConstTensorHandle_t input, int64_t dim){
             std::cout << "=================hello,diopiSoftmax========================\n";         
             musa_torch::Tensor _out = at::impl::musa::build_musatorch_tensor(out);
@@ -562,7 +555,6 @@ DIOPI_API diopiError_t diopiMm(diopiContextHandle_t ctx, diopiTensorHandle_t out
 }
 
 
-
 DIOPI_API diopiError_t diopiBmm(diopiContextHandle_t ctx, diopiTensorHandle_t out, diopiConstTensorHandle_t input, diopiConstTensorHandle_t mat2){
             musa_torch::Tensor _input = at::impl::musa::build_musatorch_tensor(input);
             musa_torch::Tensor mat2_ = at::impl::musa::build_musatorch_tensor(mat2);
@@ -577,7 +569,6 @@ DIOPI_API diopiError_t diopiBmm(diopiContextHandle_t ctx, diopiTensorHandle_t ou
             //         // _input.options().memory_format(at::MemoryFormat::Contiguous)
             //        _input.options().memory_format(at::MemoryFormat::Contiguous).device(at::kPrivateUse1)
             //        );
-            PrintTensorValues(out_);
 
             out_=at::impl::musa::BmmOut(_input, mat2_, out_);
 
@@ -586,26 +577,46 @@ DIOPI_API diopiError_t diopiBmm(diopiContextHandle_t ctx, diopiTensorHandle_t ou
 }
 
 
+// DIOPI_API diopiError_t diopiMaxAll(diopiContextHandle_t ctx, diopiTensorHandle_t max, diopiTensorHandle_t max_indices, diopiConstTensorHandle_t input,
+//                                 int64_t dim){
+
+// DIOPI_API diopiError_t diopiMaxAll(diopiContextHandle_t ctx, diopiTensorHandle_t max, diopiConstTensorHandle_t input){
+    
+//                  std::cout << "=================hello,diopiMaxAll========================\n";
+//                  musa_torch::Tensor _input = at::impl::musa::build_musatorch_tensor(input);
+//                  musa_torch::Tensor _max = at::impl::musa::build_musatorch_tensor(max);
+//                 //  musa_torch::Tensor _max_indices = at::impl::musa::build_musatorch_tensor(max_indices);                    
+//                 //  if (_input.scalar_type() == ScalarType::Double) {
+//                 //     return at::max(_input.to("cpu")).to("dipu");
+//                 //  }
+//                 REDUCE_MODE m = REDUCE_MODE::MAX;           
+
+//                 c10::DimVector dims_vec(0);
+//                 if (_input.numel() == 0) {
+//                     _max.zero_();
+//                 } else {
+//                     at::impl::musa::ReduceCall(_max, _input, dims_vec, m);
+//                 }
+//  }
+
 DIOPI_API diopiError_t diopiMax(diopiContextHandle_t ctx, diopiTensorHandle_t max, diopiTensorHandle_t max_indices, diopiConstTensorHandle_t input,
                                 int64_t dim){
-
                  musa_torch::Tensor _input = at::impl::musa::build_musatorch_tensor(input);
                  musa_torch::Tensor _max = at::impl::musa::build_musatorch_tensor(max);
-                 musa_torch::Tensor _max_indices = at::impl::musa::build_musatorch_tensor(max_indices);                    
+                //  musa_torch::Tensor _max_indices = at::impl::musa::build_musatorch_tensor(max_indices);                    
                 //  if (_input.scalar_type() == ScalarType::Double) {
                 //     return at::max(_input.to("cpu")).to("dipu");
                 //  }
                 REDUCE_MODE m = REDUCE_MODE::MAX;           
-
                 c10::DimVector dims_vec(0);
                 if (_input.numel() == 0) {
                     _max.zero_();
                 } else {
                     at::impl::musa::ReduceCall(_max, _input, dims_vec, m);
                 }
+                 std::cout << "=================hello,diopiMax========================\n";
 
  }
-
 
 
 
