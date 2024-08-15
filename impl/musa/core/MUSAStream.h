@@ -6,7 +6,7 @@
 #include <c10/util/CallOnce.h>
 #include <c10/util/irange.h>
 
-#include "musa_runtime_api.h"
+#include <musa_runtime_api.h>
 // #include "Utils.h"
 #include "Device.h"
 #include "MUSAException.h"

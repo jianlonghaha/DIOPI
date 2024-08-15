@@ -1,7 +1,7 @@
-// #ifndef TORCH_MUSA_CSRC_CORE_MUSA_HOOKS_H_
-// #define TORCH_MUSA_CSRC_CORE_MUSA_HOOKS_H_
-// #include "torch_musa/csrc/core/Device.h"
+#ifndef TORCH_MUSA_CSRC_CORE_MUSA_HOOKS_H_
+#define TORCH_MUSA_CSRC_CORE_MUSA_HOOKS_H_
 #include "MUSAHooksInterface.h"
+// #include "torch_musa/csrc/core/Device.h"
 
 namespace at {
 // namespace musa {
@@ -25,4 +25,4 @@ struct MUSAHooks : public MUSAHooksInterface {
 } // namespace musa
 // } // namespace at
 
-// #endif // TORCH_MUSA_CSRC_CORE_MUSA_HOOKS_H_
+#endif // TORCH_MUSA_CSRC_CORE_MUSA_HOOKS_H_

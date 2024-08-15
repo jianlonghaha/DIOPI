@@ -1,7 +1,8 @@
-#include "Device.h"
 #include <c10/util/CallOnce.h>
 #include <pybind11/embed.h>
 #include <deque>
+
+#include "Device.h"
 #include "MUSAException.h"
 // #include "MUSAGuard.h"
 namespace py = pybind11;

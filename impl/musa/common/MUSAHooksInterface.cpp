@@ -1,12 +1,14 @@
-#include "MUSAHooksInterface.h"
 #include <ATen/detail/PrivateUse1HooksInterface.h>
 #include <c10/util/CallOnce.h>
 #include <c10/util/Registry.h>
 #include <c10/core/Device.h>
 #include <c10/util/Exception.h>
-#include "Utils.h"
-#include "Handle.h"
 #include <iostream>
+
+
+#include "Utils.h"
+#include "MUSAHooksInterface.h"
+#include "Handle.h"
 
 namespace at {
 namespace detail {

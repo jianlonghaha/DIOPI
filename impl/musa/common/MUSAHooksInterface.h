@@ -1,5 +1,6 @@
-// #ifndef TORCH_MUSA_CSRC_CORE_MUSA_HOOKS_INTERFACE_H_
-// #define TORCH_MUSA_CSRC_CORE_MUSA_HOOKS_INTERFACE_H_
+#ifndef TORCH_MUSA_CSRC_CORE_MUSA_HOOKS_INTERFACE_H_
+#define TORCH_MUSA_CSRC_CORE_MUSA_HOOKS_INTERFACE_H_
+
 #include <ATen/core/Generator.h>
 #include <ATen/detail/PrivateUse1HooksInterface.h>
 #include <c10/core/Device.h>
@@ -51,4 +52,4 @@ namespace detail {
 const MUSAHooksInterface& getMUSAHooks();
 } // namespace detail
 } // namespace at
-// #endif // TORCH_MUSA_CSRC_CORE_MUSA_HOOKS_INTERFACE_H_
+#endif // TORCH_MUSA_CSRC_CORE_MUSA_HOOKS_INTERFACE_H_

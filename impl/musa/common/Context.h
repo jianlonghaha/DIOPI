@@ -3,15 +3,15 @@
 
 #include <c10/core/ScalarType.h>
 #include <c10/util/CallOnce.h>
+#include <Python.h>  // 添加这一行
+
 #include <mudnn.h>
 
 #include "Utils.h"
 // #include "MUSAHooksInterface.h"
-#include <Python.h>  // 添加这一行
 
 namespace at {
 namespace impl {
- 
 namespace musa {
 
 // Create a `Context` class to track the global information specified/queried by

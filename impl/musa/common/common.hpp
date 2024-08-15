@@ -1,8 +1,6 @@
 #ifndef IMPL_MUSA_COMMON_COMMON_HPP_
 #define IMPL_MUSA_COMMON_COMMON_HPP_
 
-#include <diopi/diopirt.h>
-#include <diopi/functions.h>
 #include <ATen/ATen.h>
 #include <cassert>
 #include <exception>
@@ -16,6 +14,8 @@
 #include <c10/core/Scalar.h>
 
 
+#include <diopi/diopirt.h>
+#include <diopi/functions.h>
 
 // #include "MUSAHooksInterface.h"
 #include "../musa_pytorch.h"

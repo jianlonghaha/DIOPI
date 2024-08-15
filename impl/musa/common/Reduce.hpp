@@ -1,3 +1,6 @@
+#ifndef ATEN_SRC_ATEN_NATIVE_MUSA_REDUCE_H_
+#define ATEN_SRC_ATEN_NATIVE_MUSA_REDUCE_H_
+
 #include <ATen/Config.h>
 #include <ATen/NamedTensorUtils.h>
 #include <ATen/WrapDimUtilsMulti.h>
@@ -104,13 +107,14 @@
 #include <ATen/ops/zeros_like.h>
 #endif
 
-// #include "torch_musa/csrc/aten/ops/Reduce.h"
-// #include "torch_musa/csrc/aten/ops/TensorFactory.h"
+#include <mudnn.h>
+
 #include "Utils.h"
 #include "musa_lazy_init.h"
-#include <mudnn.h>
 #include "../common/common.hpp"
 #include "../common/Utils.h"
+// #include "torch_musa/csrc/aten/ops/Reduce.h"
+// #include "torch_musa/csrc/aten/ops/TensorFactory.h"
 
 namespace at {
 namespace native { // this namespace is used to define logsumexp stub only
@@ -222,7 +226,6 @@ void ReduceCall(
 
   CHECK_MUDNN_STATUS(r.Run(h, out, in, InternalMemAlloc), "Run");
     // CHECK_MUDNN_STATUS(r.Run(h, out, in), "Run");
-    // CHECK_MUDNN_STATUS(r.Run(h, static_cast<const muTensor&>(out), static_cast<const muTensor&>(in)), "Run");
 
 }
 
@@ -928,3 +931,6 @@ void ReduceCall(
 } // namespace musa
 }
 } // namespace at
+
+
+#endif // ATEN_SRC_ATEN_NATIVE_MUSA_REDUCE_H_

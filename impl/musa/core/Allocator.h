@@ -5,13 +5,12 @@
 #include <c10/core/CPUAllocator.h>
 #include <c10/core/DeviceType.h>
 // #include <c10/musa/MUSA_PORT_Macros.h>
-#include "MUSA_PORT_Macros.h"
-
 #include <list>
-
 #include <mudnn.h>
 #include <musa_runtime.h>
 
+
+#include "MUSA_PORT_Macros.h"
 #include "MUSAGraphsC10Utils.h"
 #include "MUSAStream.h"
 

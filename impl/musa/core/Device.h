@@ -3,7 +3,7 @@
 
 #include <c10/core/Device.h>
 #include <pybind11/pybind11.h>
-#include "musa_runtime_api.h"
+#include <musa_runtime_api.h>
 
 #define MUSA_COMPILE_TIME_MAX_GPUS 16
 

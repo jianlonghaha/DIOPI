@@ -1,23 +1,23 @@
-#include <diopi/functions.h>
 #include <math.h>
 #include <cstring>
-#include <mudnn.h>
 #include <ATen/ATen.h>
 #include <c10/core/Scalar.h> 
-// #include <c10/util/DimVector.h>
 #include <c10/core/Device.h>
 #include <vector>
 #include <cstddef> // for size_t
 #include <ATen/WrapDimUtils.h>
+//#include <c10/util/DimVector.h>
 
+#include <diopi/functions.h>
+#include <mudnn.h>
 
-#include "../musa_pytorch.h"
-#include "../common/Context.h"
 #include "../common/common.hpp"
-#include "../common/Utils.h"
-#include "../common/Handle.h"
 #include "../common/Matmul.hpp" 
 #include "../common/Reduce.hpp"
+#include "../musa_pytorch.h"
+#include "../common/Context.h"
+#include "../common/Utils.h"
+#include "../common/Handle.h"
 
 
 
@@ -76,8 +76,7 @@ void PrintTensorValues(const at::Tensor& tensor) {
 
 
 DIOPI_API diopiError_t diopiAdd(diopiContextHandle_t ctx, diopiTensorHandle_t out, diopiConstTensorHandle_t input, diopiConstTensorHandle_t other,
-                                const diopiScalar_t* alpha) {         
-            std::cout << "================diopiAdd::out::======="<<out<<"=================\n";         
+                                const diopiScalar_t* alpha) {     
                         
             musa_torch::Tensor _out = at::impl::musa::build_musatorch_tensor(out);
             std::cout << "================diopidiopiAdd__out::scalar_type======="<<_out.scalar_type()<<"=================\n";         
@@ -89,10 +88,6 @@ DIOPI_API diopiError_t diopiAdd(diopiContextHandle_t ctx, diopiTensorHandle_t ou
             PrintTensorValues(_out);
             PrintTensorValues(_input);
             PrintTensorValues(_other);
-
-
-
-
 
             std::cout << "================diopidiopiAdd_input::torch::======="<<_input.scalar_type()<<"=================\n";         
             std::cout << "=================diopidiopiAdd_other::torch::============="<<_other.scalar_type()<<"===========\n";    

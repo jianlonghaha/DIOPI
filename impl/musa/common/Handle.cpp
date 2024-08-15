@@ -1,9 +1,13 @@
+#include <iostream>
+#include <torch/torch.h> 
+
+
 #include "Handle.h"
 #include "DeviceThreadHandles.h"
-// #include "torch_musa/csrc/core/MUSAStream.h"
-#include <torch/torch.h> 
 #include "Utils.h"
-#include <iostream>
+//#include "torch_musa/csrc/core/MUSAStream.h"
+
+
 #define TORCH_MUSA_CHECK(EXPR)                                       \
   do {                                                               \
     const musaError_t __err = EXPR;                                  \

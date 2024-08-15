@@ -90,9 +90,9 @@ add_library(diopi_impl SHARED
                               ${CMAKE_CURRENT_SOURCE_DIR}/common/MUSAHooks.cpp
                               ${CMAKE_CURRENT_SOURCE_DIR}/common/Context.cpp
                               ${MUSA_CORE_SOURCES}
-                              /opt/conda/envs/py38/lib/python3.8/site-packages/torch/lib/libtorch_python.so    
-                              /opt/conda/envs/py38/lib/python3.8/site-packages/torch/lib/libtorch_cpu.so  
-                              /opt/conda/envs/py38/lib/python3.8/site-packages/torch/lib/libc10.so    
+                              # /opt/conda/envs/py38/lib/python3.8/site-packages/torch/lib/libtorch_python.so    
+                              # /opt/conda/envs/py38/lib/python3.8/site-packages/torch/lib/libtorch_cpu.so  
+                              # /opt/conda/envs/py38/lib/python3.8/site-packages/torch/lib/libc10.so    
                               )
 target_link_libraries(diopi_impl PUBLIC 
                         ${MUSART_LIBRARY}
